@@ -25,10 +25,10 @@ gr1<-function(v,p1,p2,i){
           {
             i=(v-2*p2)/p1
             if(i<=0)stop("i must be a positive integer")
-            cat("MCSBRMD IS POSSIBLE with two sets of p2", "V=",v, "P1=",p1, "P2=",p2, "AND", "i=",i, "AND ALSO RUN D=2")}
+            cat("MCSBRMD IS POSSIBLE with two sets of p2", "V=",v, "P1=",p1, "P2=",p2, "AND", "i=",i, "AND ALSO RUN D=2")
           }else
-            
-            
+            cat("No Design IS POSSIBLE IN two different PERIOD SIZES FOR GIVEN", "V=",v, "P1=",p1,  "AND", "P2=",p2)  
+  }   
     if(v%%2==0){
       if((v-2-p2)%%p1==0)
       {
@@ -77,11 +77,11 @@ gr1<-function(v,p1,p2,i){
                 {
                   i=(v+1-2*p2)/p1
                   if(i<=0)stop("i must be a positive integer")
-                  cat("MCSBGRMD-I IS POSSIBLE with two sets of p2", "V=",v, "P1=",p1, "P2=",p2, "AND", "i=",i, "AND ALSO RUN D=6")}
+                  cat("MCSBGRMD-I IS POSSIBLE with two sets of p2", "V=",v, "P1=",p1, "P2=",p2, "AND", "i=",i, "AND ALSO RUN D=6")
                 }else
-      cat("No Design IS POSSIBLE IN two different PERIOD SIZES FOR GIVEN", "V=",v, "P1=",p1, "P2=",p2, "AND", "i=",i)
+                  cat("No Design IS POSSIBLE IN two different PERIOD SIZES FOR GIVEN", "V=",v, "P1=",p1,  "AND", "P2=",p2)
 }
-
+}
 #################################################################################
 # Minimal CBRMD,CSBRMD,CWBRMD-1 and CWBRMD-2_equalsize:Minimal Circular Balanced, 
 # Strongly Balanced and Weakly Balanced Repeated Measurements Designs Design 
@@ -89,8 +89,8 @@ gr1<-function(v,p1,p2,i){
 
 # Algorithm from paper:
 
-#  Muhammad Riaz, Mahmood ul Hassan, M. H. Tahir, 
-# H.M. Kashif Rasheed and Rashid Ahmed*#
+#  Muhammad Riaz, M. H. Tahir, Zawar Hussain,
+# Abid khan and Rashid Ahmed*#
 # Coded by Riaz et al., 2021-2022 
 # Version 2.1.0  (2022-04-20)
 #################################################################################
@@ -159,14 +159,14 @@ grouping2<-function(A,p,v,i,sp2){
   
   
   gs1<-t(apply(s$B1,1,sort))
-  gs1<-cbind(gs1,rowSums(gs1),rowSums(gs1)/v)
+  gs1<-cbind(gs1,rowSums(gs1),rowSums(gs1)/v,(i+sp2)*v)
   rownames(gs1)<-paste("G",1:i, sep="")
-  colnames(gs1)<-c(paste(1:p[1], sep=""),"sum" ,"sum/v")
+  colnames(gs1)<-c(paste(1:p[1], sep=""),"sum" ,"sum/v","n")
   
   gs2<-t(apply(bs1,1,sort))
-  gs2<-cbind(gs2,rowSums(gs2),rowSums(gs2)/v)
+  gs2<-cbind(gs2,rowSums(gs2),rowSums(gs2)/v,(i+sp2)*v)
   rownames(gs2)<-paste("G",(nrow(gs1)+1):(nrow(gs1)+sp2), sep="")
-  colnames(gs2)<-c(paste(1:p[2], sep=""),"sum" ,"sum/v")
+  colnames(gs2)<-c(paste(1:p[2], sep=""),"sum" ,"sum/v","n")
   
   
   fs1<-t(apply(s$B1,1,sort))
@@ -225,8 +225,8 @@ CGSBRMD_2diffsize<-function(v,p,i,D=1,sp2=1){
     row <- paste(rep("=", 51), collapse = "")
     cat(row, "\n")
     cat("Following are required sets of shifts to obtain the minimal CBRMDs,CSBRMDs 
-        and  CWBRMDs for", "v=" ,object$R[1], ",","p1=",object$R[2],
-        "and","p2=",object$R[3],"\n")
+        and  CWBRMDs for", "v=" ,object$R[1], ",","p1=",object$R[2],",", "p2=",object$R[3],
+        "and","n=",(i+sp2)*v,"\n")
     row <- paste(rep("=", 51), collapse = "")
     cat(row, "\n")
     print(object$S[[1]])
@@ -401,12 +401,13 @@ design_CGSBRMD<-function(H){
 # Design for period of two different sizes (p1 and p2)
 ###############################################################################
 
-(H<-gr1(v=31,p1=5,p2=6))
+
+(H<-gr1(v=13,p1=4,p2=5))
 
 # Examples for all cases D=1-case-1
 p=c(5,4);i=3;D=1;sp2=1
 (H<-CGSBRMD_2diffsize(p,i,D,sp2))
-(H<-CGSBRMD_2diffsize(p=c(5,6),v=31,i=5,D=2,sp2=1))
+(H<-CGSBRMD_2diffsize(p=c(4,5),v=13,i=2,D=2,sp2=1))
 H$G
 (H<-CGSBRMD_2diffsize(p=c(5,3),v=11,i=3,D=8,sp2=2))
 (design_CGSBRMD(H))
